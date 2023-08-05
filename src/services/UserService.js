@@ -123,8 +123,9 @@ let createUser = (data) => {
                     address: data.address,
                     phoneNumber: data.phoneNumber,
                     gender: data.gender,
-                    roleID: data.role,
-                    positionID: data.position,
+                    roleID: data.roleID,
+                    positionID: data.positionID,
+                    image: data.image
                 })
                 resolve({
                     errorCode: 0,
@@ -179,7 +180,9 @@ let editUser = (data) => {
                     user.positionID = data.positionID;
                     user.gender = data.gender;
                     user.phoneNumber = data.phoneNumber;
-
+                    if (data.image) {
+                        user.image = data.image;
+                    }
                     await user.save();
 
                     resolve({
