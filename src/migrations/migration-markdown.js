@@ -17,7 +17,7 @@ module.exports = {
                 type: Sequelize.TEXT('long')
             },
             description: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.TEXT('long')
             },
             doctorId: {

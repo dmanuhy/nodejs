@@ -26,6 +26,53 @@ let getTopDoctorService = (limitInput) => {
     })
 }
 
+let getAllDoctorService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let doctors = await db.User.findAll({
+                where: { roleID: 'R2' },
+                attributes: {
+                    exclude: ['password', 'image']
+                }
+            })
+            resolve({
+                errorCode: 0,
+                data: doctors
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let saveDoctorInfoService = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputData.doctorId || !inputData.contenMarkdown || !inputData.contentHTML) {
+                resolve({
+                    errorCode: -1,
+                    message: 'Missed require paramaters'
+                })
+            } else {
+                await db.Markdown.create({
+                    contentHTML: inputData.contentHTML,
+                    contenMarkdown: inputData.contenMarkdown,
+                    description: inputData.description,
+                    doctorId: inputData.doctorId
+                })
+                resolve({
+                    errorCode: 0,
+                    message: "Saved doctor infomation!"
+                })
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
-    getTopDoctorService
+    getTopDoctorService,
+    getAllDoctorService,
+    saveDoctorInfoService
 }
