@@ -42,8 +42,22 @@ let saveDoctorInfo = async (req, res) => {
 
 }
 
+const getDoctorDetailByID = async (req, res) => {
+    try {
+        let doctorDetail = await DoctorService.getDoctorDetailByIDService(req.query.id);
+        return res.status(200).json(doctorDetail);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     getTopDoctor: getTopDoctor,
     getAllDoctor: getAllDoctor,
-    saveDoctorInfo: saveDoctorInfo
+    saveDoctorInfo: saveDoctorInfo,
+    getDoctorDetailByID: getDoctorDetailByID,
 }

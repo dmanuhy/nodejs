@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
-    'testdatabase', //Database Name
+    'bookingcare', //Database Name
     'root', //username
     null, //password
     { host: 'localhost', dialect: 'mysql', logging: false }
