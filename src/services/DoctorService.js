@@ -83,7 +83,7 @@ const getDoctorDetailByIDService = (inputID) => {
                 let data = await db.User.findOne({
                     where: { id: inputID },
                     attributes: {
-                        exclude: ['password', 'image']
+                        exclude: ['password']
                     },
                     include: [
                         {
@@ -94,9 +94,17 @@ const getDoctorDetailByIDService = (inputID) => {
                             model: db.AllCode, as: `positionData`, attributes: [`valueEN`, `valueVI`, `valueJA`]
                         }
                     ],
-                    raw: true,
+                    raw: false,
                     nest: true
+
                 })
+                if (data) {
+                    if (data.image) {
+                        data.image = new Buffer(data.image, 'base64').toString('binary');
+                    }
+                } else {
+                    data = {};
+                }
                 resolve({
                     errorCode: 0,
                     data: data
