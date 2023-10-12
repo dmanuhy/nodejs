@@ -48,18 +48,34 @@ let getAllDoctorService = () => {
 let saveDoctorInfoService = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.doctorId || !inputData.contenMarkdown || !inputData.contentHTML) {
+            if (!inputData.doctorID || !inputData.contentMarkdown || !inputData.contentHTML || !inputData.action) {
                 resolve({
                     errorCode: -1,
                     message: 'Missed require paramaters'
                 })
             } else {
-                await db.Markdown.create({
-                    contentHTML: inputData.contentHTML,
-                    contenMarkdown: inputData.contenMarkdown,
-                    description: inputData.description,
-                    doctorId: inputData.doctorId
-                })
+                if (inputData.action === "CREATE") {
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.description,
+                        doctorID: inputData.doctorID
+                    })
+                } else {
+                    if (inputData.action === "UPDATE") {
+                        let doctorMarkdown = await db.Markdown.findOne({
+                            where: { doctorID: inputData.doctorID },
+                            raw: false
+                        })
+                        if (doctorMarkdown) {
+                            doctorMarkdown.contentHTML = inputData.contentHTML;
+                            doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
+                            doctorMarkdown.description = inputData.description;
+                            await doctorMarkdown.save();
+                        }
+                    }
+                }
+
                 resolve({
                     errorCode: 0,
                     message: "Saved doctor infomation!"
@@ -91,7 +107,8 @@ const getDoctorDetailByIDService = (inputID) => {
                             attributes: ['description', 'contentHTML', 'contentMarkdown']
                         },
                         {
-                            model: db.AllCode, as: `positionData`, attributes: [`valueEN`, `valueVI`, `valueJA`]
+                            model: db.AllCode, as: `positionData`,
+                            attributes: [`valueEN`, `valueVI`, `valueJA`]
                         }
                     ],
                     raw: false,
