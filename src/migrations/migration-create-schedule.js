@@ -17,7 +17,7 @@ module.exports = {
             date: {
                 type: Sequelize.DATE
             },
-            tumetype: {
+            timeType: {
                 type: Sequelize.STRING
             },
             doctorID: {
