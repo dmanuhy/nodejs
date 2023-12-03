@@ -64,7 +64,12 @@ const getDoctorScheduleByDateService = (doctorID, date) => {
                     where: {
                         doctorID: doctorID,
                         date: date
-                    }
+                    },
+                    include: [
+                        { model: db.AllCode, as: `timeData`, attributes: [`valueEN`, `valueVI`, `valueJA`] },
+                    ],
+                    raw: true,
+                    nest: true
                 })
                 if (!dataSchedule) {
                     dataSchedule = [];
