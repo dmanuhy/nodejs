@@ -24,7 +24,7 @@ initWebRoutes(app);
 
 connectDB();
 
-let port = process.env.PORT || 6969;
+let port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log("Miku is singing on the port: ", port)
 })

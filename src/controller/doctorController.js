@@ -29,14 +29,15 @@ let getAllDoctor = async (req, res) => {
     }
 }
 
-let saveDoctorInfo = async (req, res) => {
+let saveDoctorDetail = async (req, res) => {
     try {
-        let response = await DoctorService.saveDoctorInfoService(req.body);
+        let response = await DoctorService.saveDoctorDetailService(req.body);
         return res.status(200).json(response);
     } catch (e) {
+        console.log(e)
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from server'
+            message: 'Error from NodeJS server'
         })
     }
 
@@ -60,7 +61,7 @@ const getDoctorDetailByID = async (req, res) => {
 module.exports = {
     getTopDoctor: getTopDoctor,
     getAllDoctor: getAllDoctor,
-    saveDoctorInfo: saveDoctorInfo,
+    saveDoctorDetail: saveDoctorDetail,
     getDoctorDetailByID: getDoctorDetailByID,
 
 }

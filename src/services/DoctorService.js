@@ -45,37 +45,48 @@ let getAllDoctorService = () => {
     })
 }
 
-let saveDoctorInfoService = (inputData) => {
+let saveDoctorDetailService = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!inputData.doctorID || !inputData.contentMarkdown || !inputData.contentHTML || !inputData.action) {
+            if (!inputData.doctorID || !inputData.introduction || !inputData.description ||
+                !inputData.provinceID || !inputData.priceID || !inputData.paymentID ||
+                !inputData.clinicName || !inputData.clinicAddress || !inputData.action) {
                 resolve({
                     errorCode: -1,
-                    message: 'Missed require paramaters'
+                    message: 'Missed require paramater(s) !'
                 })
             } else {
                 if (inputData.action === "CREATE") {
-                    await db.Markdown.create({
-                        contentHTML: inputData.contentHTML,
-                        contentMarkdown: inputData.contentMarkdown,
+                    await db.Doctor_Detail.create({
+                        introduction: inputData.introduction,
                         description: inputData.description,
-                        doctorID: inputData.doctorID
+                        doctorID: inputData.doctorID,
+                        provinceID: inputData.provinceID,
+                        priceID: inputData.priceID,
+                        paymentID: inputData.paymentID,
+                        clinicName: inputData.clinicName,
+                        clinicAddress: inputData.clinicAddress,
+                        note: inputData.note
                     })
                 } else {
                     if (inputData.action === "UPDATE") {
-                        let doctorMarkdown = await db.Markdown.findOne({
+                        let doctorDetail = await db.Doctor_Detail.findOne({
                             where: { doctorID: inputData.doctorID },
                             raw: false
                         })
-                        if (doctorMarkdown) {
-                            doctorMarkdown.contentHTML = inputData.contentHTML;
-                            doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
-                            doctorMarkdown.description = inputData.description;
-                            await doctorMarkdown.save();
+                        if (doctorDetail) {
+                            doctorDetail.introduction = inputData.introduction;
+                            doctorDetail.description = inputData.description;
+                            doctorDetail.provinceID = inputData.provinceID;
+                            doctorDetail.priceID = inputData.priceID;
+                            doctorDetail.paymentID = inputData.paymentID;
+                            doctorDetail.clinicName = inputData.clinicName;
+                            doctorDetail.clinicAddress = inputData.clinicAddress;
+                            doctorDetail.note = inputData.note
+                            await doctorDetail.save();
                         }
                     }
                 }
-
                 resolve({
                     errorCode: 0,
                     message: "Saved doctor infomation!"
@@ -103,8 +114,8 @@ const getDoctorDetailByIDService = (inputID) => {
                     },
                     include: [
                         {
-                            model: db.Markdown,
-                            attributes: ['description', 'contentHTML', 'contentMarkdown']
+                            model: db.Doctor_Detail,
+                            attributes: ['introduction', 'description', 'provinceID', 'priceID', 'paymentID', 'clinicName', 'clinicAddress', 'note', 'count']
                         },
                         {
                             model: db.AllCode, as: `positionData`,
@@ -138,7 +149,7 @@ const getDoctorDetailByIDService = (inputID) => {
 module.exports = {
     getTopDoctorService,
     getAllDoctorService,
-    saveDoctorInfoService,
+    saveDoctorDetailService,
     getDoctorDetailByIDService,
 
 }
