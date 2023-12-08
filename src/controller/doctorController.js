@@ -29,7 +29,7 @@ let getAllDoctor = async (req, res) => {
     }
 }
 
-let saveDoctorDetail = async (req, res) => {
+const saveDoctorDetail = async (req, res) => {
     try {
         let response = await DoctorService.saveDoctorDetailService(req.body);
         return res.status(200).json(response);
@@ -63,5 +63,4 @@ module.exports = {
     getAllDoctor: getAllDoctor,
     saveDoctorDetail: saveDoctorDetail,
     getDoctorDetailByID: getDoctorDetailByID,
-
 }

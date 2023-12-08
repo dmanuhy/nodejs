@@ -115,7 +115,21 @@ const getDoctorDetailByIDService = (inputID) => {
                     include: [
                         {
                             model: db.Doctor_Detail,
-                            attributes: ['introduction', 'description', 'provinceID', 'priceID', 'paymentID', 'clinicName', 'clinicAddress', 'note', 'count']
+                            attributes: ['introduction', 'description', 'provinceID', 'priceID', 'paymentID', 'clinicName', 'clinicAddress', 'note', 'count'],
+                            include: [
+                                {
+                                    model: db.AllCode, as: "provinceData",
+                                    attributes: [`valueEN`, `valueVI`, `valueJA`]
+                                },
+                                {
+                                    model: db.AllCode, as: "priceData",
+                                    attributes: [`valueEN`, `valueVI`, `valueJA`]
+                                },
+                                {
+                                    model: db.AllCode, as: "paymentData",
+                                    attributes: [`valueEN`, `valueVI`, `valueJA`]
+                                },
+                            ]
                         },
                         {
                             model: db.AllCode, as: `positionData`,
