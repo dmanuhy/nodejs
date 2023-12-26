@@ -4,6 +4,8 @@ import userController from "../controller/userController"
 import allCodeController from "../controller/allCodeController";
 import doctorController from "../controller/doctorController";
 import scheduleController from "../controller/scheduleController";
+import bookController from "../controller/bookController";
+
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -30,7 +32,10 @@ let initWebRoutes = (app) => {
     router.get("/api/get-doctor-detail", doctorController.getDoctorDetailByID);
 
     router.post('/api/create-doctor-schedule', scheduleController.createDoctorSchedule);
-    router.get('/api/get-doctor-schedule-by-date', scheduleController.getDoctorScheduleByDate)
+    router.get('/api/get-doctor-schedule-by-date', scheduleController.getDoctorScheduleByDate);
+
+    router.post('/api/book-appointment', bookController.bookAppointment);
+
 
     return app.use("/", router);
 }
