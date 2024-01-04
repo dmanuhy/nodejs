@@ -9,19 +9,47 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             statusID: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            userID: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
             },
             doctorID: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                allowNull: false,
             },
-            patientID: {
-                type: Sequelize.INTEGER
+            patientName: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            gender: {
+                type: Sequelize.STRING
+            },
+            phoneNumber: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            dob: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            reason: {
+                type: Sequelize.TEXT,
+                allowNull: false,
             },
             date: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                allowNull: false,
             },
             timetype: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            token: {
+                type: Sequelize.TEXT('long'),
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,
