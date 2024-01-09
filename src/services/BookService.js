@@ -1,5 +1,11 @@
+require('dotenv').config();
 import db from "../models";
 import EmailService from "./EmailService";
+import { v4 as uuidv4 } from "uuid"
+
+const buildEmail = (token, userID) => {
+    return `${process.env.URL_REACT}/verify-book-appointment?token=${token}&userID=${userID}`;
+}
 
 const bookAppointmentService = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -18,9 +24,26 @@ const bookAppointmentService = (data) => {
                 })
 
                 if (user) {
+                    let token = uuidv4()
                     data.user = user;
+                    data.redirectLink = buildEmail(token, data.patientID)
                     console.log(data)
-                    await EmailService.sendConfirmBookAppointmentEmail(data)
+                    if (data && user) {
+                        await EmailService.sendConfirmBookAppointmentEmail(data)
+                        await db.Booking.create({
+                            statusID: "S1",
+                            userID: data.patientID,
+                            doctorID: data.doctorID,
+                            patientName: data.patientName,
+                            gender: data.gender,
+                            phoneNumber: data.phoneNumber,
+                            dob: data.dob,
+                            reason: data.reason,
+                            date: data.date,
+                            timeType: data.timeType,
+                            token: token
+                        })
+                    }
                     resolve({
                         errorCode: 0
                     })
@@ -38,6 +61,44 @@ const bookAppointmentService = (data) => {
     })
 }
 
+const verifyBookAppointmentService = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.token || !data.userID) {
+                resolve({
+                    errorCode: 1,
+                    message: 'Missing parameter(s) !'
+                })
+            } else {
+                let appointment = db.Booking.findOne({
+                    where: {
+                        userID: data.userID,
+                        token: data.token,
+                        statusID: "S1"
+                    },
+                    raw: false
+                })
+                if (appointment) {
+                    appointment.statusID = "S2"
+                    await appointment.save();
+                    resolve({
+                        errorCode: 0,
+                        message: 'Comfirmed appointment !'
+                    })
+                } else {
+                    resolve({
+                        errorCode: 2,
+                        message: `Appointment isn't exist or has confirmed!`
+                    })
+                }
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
-    bookAppointmentService: bookAppointmentService
+    bookAppointmentService: bookAppointmentService,
+    verifyBookAppointmentService: verifyBookAppointmentService
 }
