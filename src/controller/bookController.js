@@ -15,6 +15,7 @@ const bookAppointment = async (req, res) => {
 
 const verifyBookAppointment = async (req, res) => {
     try {
+        console.log(req.body);
         let response = await BookService.verifyBookAppointmentService(req.body)
         return res.status(200).json(response);
     } catch (e) {

@@ -3,8 +3,8 @@ import db from "../models";
 import EmailService from "./EmailService";
 import { v4 as uuidv4 } from "uuid"
 
-const buildEmail = (token, userID) => {
-    return `${process.env.URL_REACT}/verify-book-appointment?token=${token}&userID=${userID}`;
+const buildEmail = (token) => {
+    return `${process.env.URL_REACT}/verify-book-appointment/token=${token}`;
 }
 
 const bookAppointmentService = (data) => {
@@ -26,8 +26,7 @@ const bookAppointmentService = (data) => {
                 if (user) {
                     let token = uuidv4()
                     data.user = user;
-                    data.redirectLink = buildEmail(token, data.patientID)
-                    console.log(data)
+                    data.redirectLink = buildEmail(token)
                     if (data && user) {
                         await EmailService.sendConfirmBookAppointmentEmail(data)
                         await db.Booking.create({
@@ -64,23 +63,21 @@ const bookAppointmentService = (data) => {
 const verifyBookAppointmentService = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.token || !data.userID) {
+            if (!data.token) {
                 resolve({
                     errorCode: 1,
                     message: 'Missing parameter(s) !'
                 })
             } else {
-                let appointment = db.Booking.findOne({
+                let appointment = await db.Booking.findOne({
                     where: {
-                        userID: data.userID,
                         token: data.token,
                         statusID: "S1"
                     },
                     raw: false
                 })
                 if (appointment) {
-                    appointment.statusID = "S2"
-                    await appointment.save();
+                    await appointment.update({ statusID: "S2" })
                     resolve({
                         errorCode: 0,
                         message: 'Comfirmed appointment !'
