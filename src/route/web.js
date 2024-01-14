@@ -5,6 +5,7 @@ import allCodeController from "../controller/allCodeController";
 import doctorController from "../controller/doctorController";
 import scheduleController from "../controller/scheduleController";
 import bookController from "../controller/bookController";
+import specialtyController from "../controller/specialtyController";
 
 let router = express.Router();
 
@@ -36,6 +37,8 @@ let initWebRoutes = (app) => {
 
     router.post('/api/book-appointment', bookController.bookAppointment);
     router.post('/api/verify-book-appointment', bookController.verifyBookAppointment)
+
+    router.post('/api/specialty/create', specialtyController.createSpecialty)
 
     return app.use("/", router);
 }
