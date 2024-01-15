@@ -9,7 +9,15 @@ const createSpecialtyService = (data) => {
                     message: "Missing parameter"
                 })
             } else {
-
+                await db.Specialty.create({
+                    name: data.name,
+                    image: data.image,
+                    description: data.description
+                })
+                resolve({
+                    errorCode: 0,
+                    message: "Create new specialty successfully!"
+                })
             }
         } catch (e) {
             reject(e)
