@@ -25,6 +25,31 @@ const createSpecialtyService = (data) => {
     })
 }
 
+const getAllSpecialtyService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let allSpecialty = await db.Specialty.findAll({
+                attributes: ['id', 'name', 'description', 'image']
+            });
+            if (allSpecialty && allSpecialty.length > 0) {
+                allSpecialty.map(item => {
+                    item.image = new Buffer(item.image, 'base64').toString('binary');
+                    return item;
+                })
+                resolve({
+                    errorCode: 0,
+                    data: allSpecialty
+                })
+            }
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    })
+}
+
+
 module.exports = {
-    createSpecialtyService
+    createSpecialtyService,
+    getAllSpecialtyService
 }
