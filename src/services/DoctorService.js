@@ -50,7 +50,7 @@ let saveDoctorDetailService = (inputData) => {
         try {
             if (!inputData.doctorID || !inputData.introduction || !inputData.description ||
                 !inputData.provinceID || !inputData.priceID || !inputData.paymentID ||
-                !inputData.clinicName || !inputData.clinicAddress || !inputData.action) {
+                !inputData.clinicName || !inputData.clinicAddress || !inputData.specialtyID || !inputData.action) {
                 resolve({
                     errorCode: -1,
                     message: 'Missed require paramater(s) !'
@@ -61,6 +61,7 @@ let saveDoctorDetailService = (inputData) => {
                         introduction: inputData.introduction,
                         description: inputData.description,
                         doctorID: inputData.doctorID,
+                        specialtyID: inputData.specialtyID,
                         provinceID: inputData.provinceID,
                         priceID: inputData.priceID,
                         paymentID: inputData.paymentID,
@@ -77,6 +78,7 @@ let saveDoctorDetailService = (inputData) => {
                         if (doctorDetail) {
                             doctorDetail.introduction = inputData.introduction;
                             doctorDetail.description = inputData.description;
+                            doctorDetail.specialtyID = inputData.specialtyID;
                             doctorDetail.provinceID = inputData.provinceID;
                             doctorDetail.priceID = inputData.priceID;
                             doctorDetail.paymentID = inputData.paymentID;
@@ -115,7 +117,7 @@ const getDoctorDetailByIDService = (inputID) => {
                     include: [
                         {
                             model: db.Doctor_Detail,
-                            attributes: ['introduction', 'description', 'provinceID', 'priceID', 'paymentID', 'clinicName', 'clinicAddress', 'note', 'count'],
+                            attributes: ['introduction', 'description', 'specialtyID', 'provinceID', 'priceID', 'paymentID', 'clinicName', 'clinicAddress', 'note', 'count'],
                             include: [
                                 {
                                     model: db.AllCode, as: "provinceData",
@@ -129,6 +131,10 @@ const getDoctorDetailByIDService = (inputID) => {
                                     model: db.AllCode, as: "paymentData",
                                     attributes: [`valueEN`, `valueVI`, `valueJA`]
                                 },
+                                {
+                                    model: db.Specialty, as: "specialtyData",
+                                    attributes: ['id', 'name']
+                                }
                             ]
                         },
                         {

@@ -20,6 +20,14 @@ module.exports = {
                 type: Sequelize.TEXT('long'),
                 allowNull: false
             },
+            specialtyID: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
+            clinicID: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
             provinceID: {
                 type: Sequelize.STRING,
                 allowNull: false
